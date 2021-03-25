@@ -47,3 +47,22 @@ def index_of_positive_element(x: list):
         if x[i] > 0:
             return i
     return -1
+
+
+def decomposition_llt(matrix: List[list]):
+    if len(matrix) == 0 or len(matrix) != len(matrix[0]):
+        raise ValueError("Dimension error!")
+    result = [matrix[i].copy() for i in range(len(matrix))]
+    for i in range(len(matrix[0])):
+        temp = matrix[i][i]
+        for j in range(i):
+            temp -= result[i][j] * result[i][j]
+        temp = math.sqrt(temp)
+        result[i][i] = temp
+        for j in range(i + 1, len(matrix)):
+            result[j][i] = matrix[j][i]
+            for k in range(i):
+                result[j][i] -= result[i][k] * result[j][k]
+            result[j][i] /= temp
+            result[i][j] = result[j][i]
+    return result
