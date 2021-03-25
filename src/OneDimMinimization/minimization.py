@@ -82,12 +82,12 @@ class GoldenRatioSearch:
 
     def iterate(self):
         if self._need_update_first:
-            self._p2 = self._res_a + self._res_b - self._p2
+            self._p1 = self._res_a + self._alpha * (self._res_b - self._res_a)
             self._f_p1 = self._f(self._p1)
             self._f_count += 1
             self._need_update_first = False
         if self._need_update_second:
-            self._p2 = self._res_a + self._alpha * (self._res_b - self._res_a)
+            self._p2 = self._res_a + self._res_b - self._p1
             self._f_p2 = self._f(self._p2)
             self._f_count += 1
             self._need_update_second = False
