@@ -56,7 +56,7 @@ def transpose(matrix: List[list]):
 def decomposition_llt(matrix: List[list]):
     if len(matrix) == 0 or len(matrix) != len(matrix[0]):
         raise ValueError("Dimension error!")
-    result = [matrix[i].copy() for i in range(len(matrix))]
+    result = [a.copy() for a in matrix]
     for i in range(len(matrix[0])):
         temp = matrix[i][i]
         for j in range(i):
@@ -104,30 +104,6 @@ def multiply(a: list, b: list):
     else:
         raise ValueError("Invalid arguments types!")
 
-
-def gaussian_elimination(matrix: List[list], vector: list):
-    if len(matrix) != len(vector) or len(vector) == 0:
-        raise ValueError("Dimension mismatch!")
-    current_i = 0
-    for i in range(len(matrix[0])):
-        main_element = matrix[current_i + i][i]
-        while main_element == 0:
-            for j in range(i + 1, len(matrix)):
-                if matrix[current_i + j][i] != 0:
-                    main_element = matrix[current_i + j][i]
-                    for k in range(len(matrix[0])):
-                        temp = matrix[current_i + j][k]
-                        matrix[current_i + j][k] = matrix[current_i + i][k]
-                        matrix[current_i + i][k] = temp
-                    break
-            if main_element == 0:
-                current_i -= 1
-                i += 1
-                if i == len(matrix[0]):
-                    break
-        if main_element != 0:
-            for j in range(current_i)
-
-
-def is_linear_dependent(vector_list: List[list], indexes: List[int], index: int):
-
+#
+# def is_linear_dependent(vector_list: List[list], indexes: List[int], index: int):
+#
