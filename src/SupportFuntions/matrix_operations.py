@@ -103,7 +103,3 @@ def multiply(a: list, b: list):
         return res
     else:
         raise ValueError("Invalid arguments types!")
-
-#
-# def is_linear_dependent(vector_list: List[list], indexes: List[int], index: int):
-#

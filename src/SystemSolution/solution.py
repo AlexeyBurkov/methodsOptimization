@@ -1,5 +1,6 @@
 from typing import List
 from SupportFuntions.matrix_operations import decomposition_llt
+from SupportFuntions.matrix_operations import transpose
 
 
 def linear_system_solution_llt(matrix: List[list], vector: list):
@@ -25,6 +26,7 @@ def linear_system_solution_gaussian_elimination(matrix: List[list], vector: list
     if len(matrix) != len(vector) or len(vector) == 0:
         raise ValueError("Dimension mismatch!")
     m = [a.copy() for a in matrix]
+    v = vector.copy()
     current_i = 0
     for i in range(len(m[0])):
         main_element = m[current_i + i][i]
@@ -48,4 +50,21 @@ def linear_system_solution_gaussian_elimination(matrix: List[list], vector: list
                     mul = m[j][i] / main_element
                     for k in range(i, len(m[j])):
                         m[j][k] -= mul * m[current_i + i][k]
+                    v[j] -= mul * v[current_i + i]
+    if m[len(m[0]) - 1][len(m[0]) - 1] == 0.:
+        return []
+    for i in range(len(m[0]), len(v)):
+        if v[i] != 0.:
+            return []
+    res = [v[i] for i in range(len(m[0]))]
+    for i in range(len(m[0]) - 1, -1, -1):
+        for k in range(i + 1, len(m[0])):
+            res[i] -= res[k] * m[i][k]
+        res[i] /= m[i][i]
+    return res
 
+
+def is_linear_dependent(vector_list: List[list], indexes: List[int], index: int):
+    a = transpose([vector_list[i] for i in indexes])
+    b = vector_list[index]
+    return len(linear_system_solution_gaussian_elimination(a, b)) != 0
