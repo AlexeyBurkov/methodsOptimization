@@ -1,7 +1,8 @@
 from typing import List
 
 
-def next_unique_combination(x: List[int], max_value: int):
+def next_unique_combination(comb: List[int], max_value: int):
+    x = comb.copy()
     for i in range(len(x) - 1, -1, -1):
         if x[i] < (max_value - len(x) + 1 + i):
             x[i] += 1

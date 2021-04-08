@@ -68,3 +68,7 @@ def is_linear_dependent(vector_list: List[list], indexes: List[int], index: int)
     a = transpose([vector_list[i] for i in indexes])
     b = vector_list[index]
     return len(linear_system_solution_gaussian_elimination(a, b)) != 0
+
+
+# def invert(matrix: List[list]):
+#
