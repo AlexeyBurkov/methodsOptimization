@@ -3,7 +3,7 @@ import numpy as numpy
 from fractions import Fraction as Q
 from typing import List
 from SupportFuntions.matrix_operations import inner_product, add_vector, scale_vector, index_of_negative_element, \
-    index_of_positive_element, multiply
+    index_of_positive_element, multiply, sub_vector
 from Combinatorics.combinations import next_unique_combination
 from SystemSolution.solution import is_linear_dependent
 
@@ -38,47 +38,50 @@ def simplex(a_matrix: List[List[Q]], c_vec: List[Q], x_0: List[Q], n_k: List[int
     while True:
         c_n = [c_vec[i] for i in n_k]
         c_l = [c_vec[i] for i in l_k]
-        a_l = [[a_matrix[i][l_k[j]] for j in range(m_size) if j in range(len(l_k))] for i in range(m_size)]
-        d_l = add_vector(c_l, scale_vector(-1, multiply(multiply(c_n, b_matrix), a_l)))
+        a_l = [[a_matrix[i][l_k[j]] for j in range(n_size) if j in range(len(l_k))] for i in range(m_size)]
+        d_l = sub_vector(c_l, multiply(multiply(c_n, b_matrix), a_l))
+        #
         j_k = index_of_negative_element(d_l)
         if j_k < 0:
             return x_0
+        j_k = l_k[j_k]
+        #
         u_k = [Q(0) for _ in range(n_size)]
         a_j_k = [a_matrix[i][j_k] for i in range(m_size)]
         temp = multiply(b_matrix, a_j_k)
         for i in range(len(n_k)):
             u_k[n_k[i]] = temp[i]
         u_k[j_k] = Q(-1)
-        if index_of_positive_element(u_k) >= 0:
+        #
+        if index_of_positive_element(u_k) < 0:
             return None
+        #
         i_k = 0
         if n_k == n_p or index_of_positive_element([u_k[i] for i in n_k if i not in n_p]) < 0:
-            temp1 = [x_0[i] / u_k[i] for i in range(n_size) if u_k[i] > 0]
-            coefficient_k = min(temp1)
-            i_k = temp1.index(coefficient_k)
-            x_0 = add_vector(x_0, scale_vector(-coefficient_k, u_k))
-        else:
+            i_k = n_k[index_of_positive_element([u_k[i] for i in n_k])]
+            coefficient_k = x_0[i_k] / u_k[i_k]
             for i in n_k:
-                if i in n_0:
-                    i_k = i
-                    break
-            j_k = l_k[0]
-        n_k.remove(i_k)
-        n_k.append(j_k)
-        l_k.remove(j_k)
-        l_k.append(i_k)
+                if u_k[i] > 0:
+                    temp1 = x_0[i] / u_k[i]
+                    if temp1 < coefficient_k:
+                        i_k = i
+                        coefficient_k = temp1
+            x_0 = add_vector(x_0, scale_vector(-coefficient_k, u_k))
+            print(x_0)
+        else:
+        #     сделать самену базиса нормально
+        #
+        j = n_k.index(i_k)
+        n_k[n_k.index(i_k)] = j_k
+        l_k[l_k.index(j_k)] = i_k
         a_j_k = [a_matrix[i][j_k] for i in range(m_size)]
         alpha = multiply(b_matrix, a_j_k)
         f_matrix = [[Q(0) for _ in range(len(n_k))] for _ in range(len(n_k))]
         for i in range(len(n_k)):
             f_matrix[i][i] = Q(1)
         for i in range(len(n_k)):
-            f_matrix[i][i_k] = -alpha[i] / alpha[i_k]
+            if i == j:
+                f_matrix[i][j] = 1 / alpha[j]
+            else:
+                f_matrix[i][j] = -alpha[i] / alpha[j]
         b_matrix = multiply(f_matrix, b_matrix)
-
-
-
-def solve_simplex(a_matrix, b_vec, c_vec, x_0_vec):
-    n_k = count_params(a_matrix, x_0_vec)
-    a_matrix_k = [[a_matrix[i][j] for j in range(a_matrix)]]
-    b_matrix = numpy.linalg.inv()

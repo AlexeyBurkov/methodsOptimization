@@ -29,6 +29,14 @@ def add_vector(x: list, y: list):
     return [x[i] + y[i] for i in range(len(x))]
 
 
+def sub_vector(x: list, y: list):
+    if len(x) != len(y) or len(x) == 0:
+        raise ValueError("Dimension mismatch!")
+    if not isinstance(x[0], type(y[0])):
+        raise ValueError("Type mismatch!")
+    return [x[i] - y[i] for i in range(len(x))]
+
+
 def scale_vector(a, x: list):
     if not isinstance(a, type(x[0])):
         raise ValueError("Type mismatch!")
@@ -92,14 +100,14 @@ def multiply(a: list, b: list):
         else:
             raise ValueError("Invalid vector element type!")
     elif type(b[0]) is list:
-        if len(a) != len(b[0]):
+        if len(a) != len(b):
             raise ValueError("Dimension mismatch!")
         if not isinstance(a[0], type(b[0][0])):
             raise ValueError("Invalid matrix element type!")
-        res = [a[i] * b[0][i] for i in range(len(b[0]))]
+        res = [a[0] * b[0][i] for i in range(len(b[0]))]
         for i in range(len(b[0])):
             for k in range(1, len(a)):
-                res[i] += a[i] * b[k][i]
+                res[i] += a[k] * b[k][i]
         return res
     else:
         raise ValueError("Invalid arguments types!")
