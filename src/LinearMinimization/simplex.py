@@ -72,8 +72,7 @@ def simplex(a_matrix: List[List[Q]], c_vec: List[Q], x_0: List[Q], n_k: List[int
                     if temp1 < coefficient_k:
                         i_k = i
                         coefficient_k = temp1
-            x_0 = add_vector(x_0, scale_vector(-coefficient_k, u_k))
-            print(x_0)
+            x_0 = sub_vector(x_0, scale_vector(coefficient_k, u_k))
         else:
             temp1 = [n_k[i] for i in range(len(n_k)) if n_k[i] not in n_p]
             i = random.randint(0, len(temp1))
