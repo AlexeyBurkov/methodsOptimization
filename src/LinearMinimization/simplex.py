@@ -1,4 +1,6 @@
 import math as math
+import random
+
 import numpy as numpy
 from fractions import Fraction as Q
 from typing import List
@@ -38,7 +40,7 @@ def simplex(a_matrix: List[List[Q]], c_vec: List[Q], x_0: List[Q], n_k: List[int
     while True:
         c_n = [c_vec[i] for i in n_k]
         c_l = [c_vec[i] for i in l_k]
-        a_l = [[a_matrix[i][l_k[j]] for j in range(n_size) if j in range(len(l_k))] for i in range(m_size)]
+        a_l = [[a_matrix[i][l_k[j]] for j in range(len(l_k))] for i in range(m_size)]
         d_l = sub_vector(c_l, multiply(multiply(c_n, b_matrix), a_l))
         #
         j_k = index_of_negative_element(d_l)
@@ -57,7 +59,11 @@ def simplex(a_matrix: List[List[Q]], c_vec: List[Q], x_0: List[Q], n_k: List[int
             return None
         #
         i_k = 0
-        if n_k == n_p or index_of_positive_element([u_k[i] for i in n_k if i not in n_p]) < 0:
+        positive = True
+        for i in n_k:
+            if x_0[i] < 0:
+                positive = False
+        if positive or index_of_positive_element([u_k[i] for i in n_k if i not in n_p]) < 0:
             i_k = n_k[index_of_positive_element([u_k[i] for i in n_k])]
             coefficient_k = x_0[i_k] / u_k[i_k]
             for i in n_k:
@@ -69,8 +75,9 @@ def simplex(a_matrix: List[List[Q]], c_vec: List[Q], x_0: List[Q], n_k: List[int
             x_0 = add_vector(x_0, scale_vector(-coefficient_k, u_k))
             print(x_0)
         else:
-        #     сделать самену базиса нормально
-        #
+            temp1 = [n_k[i] for i in range(len(n_k)) if n_k[i] not in n_p]
+            i = random.randint(0, len(temp1))
+            i_k = temp1[i]
         j = n_k.index(i_k)
         n_k[n_k.index(i_k)] = j_k
         l_k[l_k.index(j_k)] = i_k
