@@ -2,7 +2,6 @@ import math as math
 import random
 
 import numpy as numpy
-from fractions import Fraction as Q
 from typing import List
 from SupportFuntions.matrix_operations import inner_product, add_vector, scale_vector, index_of_negative_element, \
     index_of_positive_element, multiply, sub_vector
@@ -26,13 +25,13 @@ class Simplex:
         self._is_optimum = None
         self._n_size = len(self._x)
         self._m_size = len(self._a)
-        self._n_k = n
+        self._n_k = n.copy()
         self._n_p = [i for i in range(self._n_size) if self._x[i] > 0]
         self._n_0 = [i for i in range(self._n_size) if i not in self._n_p]
         self._l_k = [i for i in range(self._n_size) if i not in self._n_k]
 
     def get_result(self):
-        return self._x
+        return self._x.copy()
 
     def test_result(self):
         if self._is_optimum is None:

@@ -70,5 +70,15 @@ def is_linear_dependent(vector_list: List[list], indexes: List[int], index: int)
     return len(linear_system_solution_gaussian_elimination(a, b)) != 0
 
 
-# def invert(matrix: List[list]):
-#
+def invert(matrix: List[list]):
+    if len(matrix) == 0 or len(matrix) != len(matrix[0]):
+        raise ValueError('Invalid matrix dimension')
+    elem_type = type(matrix[0][0])
+    result = [el.copy() for el in matrix]
+    for i in range(len(result)):
+        b = [elem_type(0) for _ in range(len(result))]
+        b[i] = elem_type(1)
+        temp = linear_system_solution_gaussian_elimination(matrix, b)
+        for j in range(len(temp)):
+            result[j][i] = temp[j]
+    return result
